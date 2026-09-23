@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap@5.3.6",
+      "destination": "wwwroot/bootstrap/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@popperjs/core@2.11.8",
+      "destination": "wwwroot/popperjs/core/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "knockout@3.5.1",
+      "destination": "wwwroot/lib/knockout/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "bootstrap-icons@1.13.1",
+      "destination": "wwwroot/lib/bootstrap-icons/"
+    }
+  ]
+}

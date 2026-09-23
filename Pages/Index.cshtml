@@ -1,0 +1,233 @@
+﻿@page
+
+<div class="container py-4">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+
+        <div class="col">
+            <div class="card shadow-sm h-100 text-center">
+                <div class="card-header fw-bold">Configuration</div>
+                <div class="card-body">
+                    <a class="btn btn-outline-primary w-100 py-4" href="/RaceConfig" role="button">
+                        <img src="~/images/oip.jpg" width="100" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm h-100 text-center">
+                <div class="card-header fw-bold">Start List</div>
+                <div class="card-body">
+                    <button type="button" class="btn btn-outline-secondary w-100 py-4" disabled>
+                        <img src="~/images/list.png" width="100" />
+                    </button>
+                </div>
+            </div>
+        </div>
+        </<div>
+            <div class="col">
+                <div class="card shadow-sm h-100 text-center">
+                    <div class="card-header fw-bold">Timer</div>
+                        <div class="card-body">
+                        <button type="button" class="btn btn-outline-secondary w-100 py-4" disabled>
+                                <img src="~/images/stopwatch-icon-12.png" width="100" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <div class="col">
+                <div class="card shadow-sm h-100 text-center">
+                    <div class="card-header fw-bold">Results</div>
+                        <div class="card-body">
+                        <button type="button" class="btn btn-outline-secondary w-100 py-4" disabled>
+                                <img src="~/images/results.png" width="100" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="LoadTeamsModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="Load Teams Dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Load Teams</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="input-group input-group-sm mb-3">
+
+                        <input class="form-control form-control-sm" id="formFileSm" type="file">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">No.</span>
+                        <input type="text" class="form-control" placeholder="Number" data-bind="value: NewTeamNumber" aria-label="Username">
+                        <span class="input-group-text">Name</span>
+                        <input type="text" class="form-control" placeholder="Name" data-bind="value: NewTeamName" aria-label="Server">
+                        <button type="button" data-bind="click:AddTeams" class="btn btn-secondary btn-sm">Add</button>
+                    </div>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">Number</th>
+                                <th scope="col">Name</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider" data-bind="foreach:Teams">
+                            <tr>
+
+                                <td data-bind="text: TeamNumber"></td>
+                                <td data-bind="text: TeamName"></td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="SettingsModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="Settings Dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Time Trial Settings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+                    <input type="text" class="form-control" placeholder="Interval time in Minutes" aria-label="Time Interval" data-bind="value: Interval">
+                    <span class="input-group-text">Mins</span>
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">Distance</span>
+                    <input type="text" class="form-control" placeholder="Distance in KM" aria-label="Distance" data-bind="value: Distance">
+                    <span class="input-group-text">Km</span>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="FinishModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="Finished Dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row gx-5">
+                        <div class="col-md-6 p-3">
+                            <div class="card ">
+                                <div class="card-header">
+                                    Time Summary
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><h6>Start Time   : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+                                    <li class="list-group-item"><h6>Finish Time  : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+                                    <li class="list-group-item"><h6>Average Time : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 p-3">
+                            <div class="card ">
+                                <div class="card-header">
+                                    Team Summary
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><h6>Started  : <span class="badge text-bg-secondary">0</span></h6></li>
+                                    <li class="list-group-item"><h6>Finished : <span class="badge text-bg-secondary">0</span></h6></li>
+                                    <li class="list-group-item"><h6>D.N.F    : <span class="badge text-bg-secondary">0</span></h6></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"></th>
+                            <th scope="col">Team</th>
+
+
+                            <th scope="col">Finish</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Speed</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider" data-bind="foreach:Results">
+                        <tr>
+                            <th scope="row" data-bind="text: ($index()+1)"></th>
+                            <td>
+                                <div data-bind="if: $index()==0">
+                                    <img src="~/images/Gold.png" width="24" />
+                                </div>
+                                <div data-bind="if: $index()==1">
+                                    <img src="~/images/Second.png" width="24" />
+                                </div>
+                                <div data-bind="if: $index()==2">
+                                    <img src="~/images/Third.png" width="24" />
+                                </div>
+                            </td>
+                            @* <td data-bind="text: TeamName"></td> *@
+                            @* <td data-bind="text: TeamName+ '<i> +'+ IntervalOffSet+' min(s)<i>'"> *@
+                            <td>
+                                <b><span data-bind="text: TeamName"></span></b> &nbsp;
+
+                                <span class="badge rounded-pill bg-info" data-bind="text: '+' + IntervalOffSet +' min(s)'"></span>
+                            </td>
+
+                            <td data-bind="text: formatDate(FinishTime)"></td>
+
+                            <td data-bind="text: Duration"></td>
+                            <td data-bind="text: Speed+' Km/h'"></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Finish</button>
+                <button type="button" data-bind="click:Download" class="btn btn-primary">Download Results</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
