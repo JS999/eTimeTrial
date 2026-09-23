@@ -1,0 +1,97 @@
+﻿@page
+<div id="overlay"></div>
+
+<div>
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Race Results</h5>
+
+</div>
+
+
+<div class="container-fluid">
+    <div class="row gx-5">
+        <div class="col-md-6 p-3">
+            <div class="card ">
+                <div class="card-header">
+                    Time Summary
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><h6>Start Time   : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+                    <li class="list-group-item"><h6>Finish Time  : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+                    <li class="list-group-item"><h6>Average Time : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6 p-3">
+            <div class="card ">
+                <div class="card-header">
+                    Team Summary
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><h6>Started  : <span class="badge text-bg-secondary">0</span></h6></li>
+                    <li class="list-group-item"><h6>Finished : <span class="badge text-bg-secondary">0</span></h6></li>
+                    <li class="list-group-item"><h6>D.N.F    : <span class="badge text-bg-secondary">0</span></h6></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+           
+            <th scope="col">Team</th>
+            <th scope="col">Offset(mins)</th>
+
+            <th scope="col">Finish</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Speed</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider" data-bind="foreach:Results">
+        <tr>
+            @* <td data-bind="text: ($index()+1)"></td> *@
+            <td>
+                <div data-bind="if: $index()==0">
+                    <img src="~/images/Gold.png" width="24" />
+                </div>
+                <div data-bind="if: $index()==1">
+                    <img src="~/images/Second.png" width="24" />
+                </div>
+                <div data-bind="if: $index()==2">
+                    <img src="~/images/Third.png" width="24" />
+                </div>
+                <div data-bind="if: $index()>2">
+                    @* <img src="~/images/Third.png" width="24" /> *@
+                    <span data-bind="text: ($index()+1)"></span>
+                </div>
+
+            </td>
+
+            <td>
+                <b><span data-bind="text: TeamName"></span></b>
+            </td>
+           @*  <td>
+                <span class="badge rounded-pill bg-info" data-bind="text: '+' + IntervalOffSet +' min(s)'"></span>
+            </td> *@
+            <td data-bind="text: StartTime"></td>
+            <td data-bind="text: FinishTime"></td>
+
+            <td data-bind="text: Duration"></td>
+            <td data-bind="text: Speed+' Km/h'"></td>
+        </tr>
+
+    </tbody>
+</table>
+
+
+
+<script src="~/js/Results.js" asp-append-version="true"></script>

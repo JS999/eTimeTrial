@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/eTimeTrialWebapi/apis/eTimeTrialWeb",
+      "type": "apis.azure"
+    },
+    "cosmosdb1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.Web/sites/etimetrial-web/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsCosmosDBConnection_47339AF0E2",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.DocumentDB/databaseAccounts/etimetrialacct",
+      "type": "cosmosdb.azure",
+      "connectionId": "ConnectionStrings:CosmosDBConnection",
+      "dynamicId": null
+    }
+  }
+}

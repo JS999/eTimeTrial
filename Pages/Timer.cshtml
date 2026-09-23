@@ -1,0 +1,370 @@
+﻿@page
+
+<div id="overlay"></div>
+<div class="container py-4">
+    <div class="text-center mb-4">
+
+        @* <div class="btn-group flex-wrap" role="group">
+            <button class="btn btn-lg btn-success px-4" type="button" data-bind="click:Start,disable: isNotReady" style="--bs-btn-font-size: 1.5rem;">
+                <i class="bi bi-stopwatch"></i>
+                <span role="status">Start</span>
+            </button>
+            <button data-bind="disable: IsDisabled" onclick="pauseTimer()" type="button" class="btn btn-warning">
+                <i class="bi bi-pause"></i>
+                <span role="status">Pause</span>
+            </button>
+            <button type="button" data-bind="disable: IsDisabled" class="btn btn-danger btn-lg btn-success px-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="--bs-btn-font-size: 1.5rem;">
+                <i class="bi bi-stop-circle"></i>
+                <span role="status">Stop</span>
+            </button>
+        </div> *@
+        <div class="btn-group flex-wrap gap-3" role="group">
+
+            <button class="circle-btn btn-success"
+                    type="button"
+                    data-bind="click:Start,disable: isNotReady">
+                <i class="bi bi-stopwatch"></i>
+               
+            </button>
+           
+            <button class="circle-btn btn-warning circle-btn-sm"
+                    type="button" 
+                    data-bind="click:pauseTimer,disable: IsDisabled"
+                    onclick="pauseTimer()">
+                <i class="bi bi-pause"></i>
+            </button>
+
+            <button class="circle-btn btn-danger"
+                    type="button"
+                    data-bind="disable: IsDisabled"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">
+                <i class="bi bi-stop-circle"></i>
+               
+            </button>
+
+        </div>
+
+
+
+        <a class="btn btn-primary results-fab"
+           data-bs-toggle="offcanvas"
+           data-bs-target="#offcanvasExample"
+          >
+            <i class="bi bi-table" style="font-size: 2.4rem;"></i>
+        </a>
+
+    </div>
+        <div class="mt-4">
+            <img src="~/images/stopwatch-icon-12.png" width="60" alt="Stopwatch Icon" />
+            <h1 class="time mt-2" id="display">
+                00:00:00.000
+            </h1>
+        </div>
+
+
+    
+
+    <div class="offcanvas offcanvas-start w-100 w-md-50" tabindex="-1" id="offcanvasExample">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Race Results</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            @* <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge bg-info text-dark results-badge"
+                      data-bind="text:'Start Time: ' + formatDate(StartTime())"></span>
+
+                <span class="badge bg-info text-dark results-badge"
+                      data-bind="text:'Teams Starting: ' + Teams().length"></span>
+
+                <span class="badge bg-info text-dark results-badge"
+                      data-bind="text:'Teams Finished: ' + Results().length"></span>
+            </div> *@
+            <div class="table-responsive">
+                <table class="table table-striped table-sm table-results">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"></th>
+                            <th scope="col">Team</th>
+                            <th scope="col">Finish</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Speed<small> (Km/h)</small></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider" data-bind="foreach:Results">
+                        <tr>
+                            <th scope="row" data-bind="text: ($index()+1)"></th>
+                            <td>
+                                <div data-bind="if: $index()==0">
+                                    <img src="~/images/Gold.png" width="24" />
+                                </div>
+                                <div data-bind="if: $index()==1">
+                                    <img src="~/images/Second.png" width="24" />
+                                </div>
+                                <div data-bind="if: $index()==2">
+                                    <img src="~/images/Third.png" width="24" />
+                                </div>
+                            </td>
+                            <td>
+                                <b><span data-bind="text: TeamName"></span></b> &nbsp;
+
+                                <span class="badge rounded-pill bg-info" data-bind="text: '+' + IntervalOffSet +' min(s)'"></span>
+                            </td>
+
+                            <td data-bind="text: FinishTime"></td>
+
+                            <td data-bind="text: Duration"></td>
+                            <td data-bind="text: Speed"></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-4 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header fw-bold">
+                    <h5 data-bind="text: HeaderText"></h5>
+                </div>
+
+                <div class="card-body">
+                    <form>
+                        <div class="input-group input-group-lg mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-lg">Team</span>
+                            <input type="text" class="form-control" inputmode="numeric" pattern="[0-9]*"
+                                   data-bind="disable: IsDisabled,value: TeamNumber"
+                                   aria-label="Enter Team Number" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="container text-center mt-3 numberpad-container">
+                            <!-- Row 1 -->
+                            <div class="row g-3">
+                                <div class="col-4">
+                                    <button id="btn1" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'1')"
+                                            type="button"
+                                            class="timing-key">
+                                        <i class="bi bi-1-circle"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button id="btn2" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'2')" type="button"
+                                            class="timing-key">
+                                        <i class="bi bi-2-circle"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button id="btn3" data-bind="disable: IsDisabled,click:  BtnClicked.bind($data, '3')  "
+                                            type="button"
+                                            class="timing-key">
+                                        <i class="bi bi-3-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <!-- Row 2 -->
+                            <div class="row g-3 mt-1">
+                                <div class="col-4">
+                                    <button id="btn4" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'4')"
+                                            type="button" class="timing-key">
+                                        <i class="bi bi-4-circle"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button id="btn5" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'5')"
+                                            type="button" class="timing-key">
+                                        <i class="bi bi-5-circle"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button id="btn6" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'6')"
+                                            type="button" class="timing-key">
+                                        <i class="bi bi-6-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Row 3 -->
+                            <div class="row g-3 mt-1">
+                                <div class="col-4">
+                                    <button id="btn7" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'7')"
+                                            type="button" class="timing-key">
+                                        <i class="bi bi-7-circle"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button id="btn8" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'8')"
+                                            type="button" class="timing-key">
+                                        <i class="bi bi-8-circle"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button id="btn9" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'9')"
+                                            type="button" class="timing-key">
+                                        <i class="bi bi-9-circle"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <!-- Row 4 (Centered Zero) -->
+                            <div class="row g-3 mt-1">
+                                <div class="col-4 offset-4">
+                                    <button id="btn0" data-bind="disable: IsDisabled,click:BtnClicked.bind($data,'0')"
+                                            type="button"
+                                            class="timing-key-zero">
+                                        <i class="bi bi-0-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    <div class="row g-3 mt-2">
+                        <div class="col-12">
+                            <button class="timing-enter"
+                                    type="button" data-bind="disable: IsDisabled,click: TeamFinished" id="liveToastBtn">
+                                Enter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="liveToast" class="toast align-items-center bg-primary text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" data-bind="html: ToastMessage"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade" id="FinishModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="Finished Dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Results</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row gx-5">
+                            <div class="col-md-6 p-3">
+                                <div class="card ">
+                                    <div class="card-header">
+                                        Time Summary
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><h6>Start Time   : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+                                        <li class="list-group-item"><h6>Finish Time  : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+                                        <li class="list-group-item"><h6>Average Time : <span class="badge text-bg-secondary">00:00:00</span></h6></li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6 p-3">
+                                <div class="card ">
+                                    <div class="card-header">
+                                        Team Summary
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><h6>Started  : <span class="badge text-bg-secondary">0</span></h6></li>
+                                        <li class="list-group-item"><h6>Finished : <span class="badge text-bg-secondary">0</span></h6></li>
+                                        <li class="list-group-item"><h6>D.N.F    : <span class="badge text-bg-secondary">0</span></h6></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col"></th>
+                                <th scope="col">Team</th>
+
+
+                                <th scope="col">Finish</th>
+                                <th scope="col">Duration</th>
+                                <th scope="col">Speed</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider" data-bind="foreach:Results">
+                            <tr>
+                                <th scope="row" data-bind="text: ($index()+1)"></th>
+                                <td>
+                                    <div data-bind="if: $index()==0">
+                                        <img src="~/images/Gold.png" width="24" />
+                                    </div>
+                                    <div data-bind="if: $index()==1">
+                                        <img src="~/images/Second.png" width="24" />
+                                    </div>
+                                    <div data-bind="if: $index()==2">
+                                        <img src="~/images/Third.png" width="24" />
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <b><span data-bind="text: TeamName"></span></b> &nbsp;
+
+                                    <span class="badge rounded-pill bg-info" data-bind="text: '+' + IntervalOffSet +' min(s)'"></span>
+                                </td>
+
+                                <td data-bind="text: FinishTime"></td>
+
+                                <td data-bind="text: Duration"></td>
+                                <td data-bind="text: Speed+' Km/h'"></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Finish</button>
+                    <button type="button" data-bind="click:Download" class="btn btn-primary">Download Results</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Finish Race</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>
+                        Are you sure you want to finish the race?<br />
+                        <small class="text-muted">This action cannot be undone</small>
+                    </h6>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" data-bind="click:stopTimer">Finish Race</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/Timer.js" asp-append-version="true"></script>
+

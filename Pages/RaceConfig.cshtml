@@ -1,0 +1,288 @@
+﻿@page
+
+<div class="container-lg">
+
+    <!-- New Race Button -->
+    <div class="row g-3">
+        <div class="col-12 col-md-10 col-lg-8 mx-auto text-center">
+            <button id="LoadTeamsBtn" type="button" class="btn p-2 p-sm-3">
+                <img src="~/images/CheckeredFlag.png" class="img-fluid" style="max-width:100px;" />
+                <span>New Race</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="row g-3 mt-3">
+        <div class="col-12 col-md-10 col-lg-8 mx-auto">
+
+            <ul class="nav nav-tabs flex-nowrap overflow-auto small" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#current">
+                        Current Races
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#finished">
+                        Finished Races
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-3">
+
+                <!-- Current Races -->
+                <div id="current" class="tab-pane fade show active">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Race Name</th>
+                                    <th>Date/Time</th>
+                                    <th>Competitors</th>
+                                    <th>Distance (km)</th>
+                                    <th>Interval (min)</th>
+                                </tr>
+                            </thead>
+                           @*  <tbody data-bind="foreach: UpcomingRaces" class="table-group-divider">
+                                <tr data-bind="click: () => window.location.href = `/timer?raceId=${id}&raceName=${raceName}`">
+                                    <td data-bind="text: raceName"></td>
+                                    <td data-bind="text: raceStartDate + ' - ' + raceStartTime"></td>
+                                    <td data-bind="text: teams.length"></td>
+                                    <td data-bind="text: distanceKm"></td>
+                                    <td data-bind="text: interval"></td>
+                                </tr>
+                            </tbody> *@
+
+                            <tbody data-bind="foreach: UpcomingRaces" class="table-group-divider">
+                                <tr data-bind="click: () => window.location.href = `/timer?raceId=${id}&raceName=${raceName}`">
+                                    <td data-label="Race Name" data-bind="text: raceName"></td>
+                                    <td data-label="Date/Time" data-bind="text: raceStartDate + ' - ' + raceStartTime"></td>
+                                    <td data-label="Competitors" data-bind="text: teams.length"></td>
+                                    <td data-label="Distance (km)" data-bind="text: distanceKm"></td>
+                                    <td data-label="Interval (min)" data-bind="text: interval"></td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Finished Races -->
+                <div id="finished" class="tab-pane fade">
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Race Name</th>
+                                    <th>Date/Time</th>
+                                    <th>Distance (km)</th>
+                                    <th>Interval (min)</th>
+                                    <th>Competitors</th>
+
+                                    <th>Winning Time</th>
+                                    <th>Completed</th>
+                                    <th>DNF</th>
+                                </tr>
+                            </thead>
+                            @* <tbody data-bind="foreach: CompletedRaces" class="table-group-divider">
+                                <tr>
+                                    <!-- Bindings go here -->
+                                </tr>
+                            </tbody> *@
+
+                            <tbody data-bind="foreach: CompletedRaces" class="table-group-divider">
+                                <tr data-bind="click: () => window.location.href = `/timer?raceId=${id}&raceName=${raceName}`">
+                                    <td data-label="Race Name" data-bind="text: raceName"></td>
+                                    <td data-label="Date/Time" data-bind="text: raceStartDate + ' - ' + raceStartTime"></td>
+                                    <td data-label="Distance (km)" data-bind="text: distanceKm"></td>
+                                    <td data-label="Interval (min)" data-bind="text: interval"></td>
+                                    <td data-label="Competitors" data-bind="text: teams.length"></td>
+                                    
+                                </tr>
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="LoadTeamsModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="Load Teams Dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Race</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Race Name.</span>
+                        <input type="text" class="form-control" placeholder="RaceName" data-bind="value: NewRaceName" aria-label="TeamNumber">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Race Date.</span>
+                        <select class="form-select form-select-sm" aria-label="Month" data-bind="value: NewRaceMonth">
+                            <option selected></option>
+                            <option value="1">Jan</option>
+                            <option value="2">Feb</option>
+                            <option value="3">Mar</option>
+                            <option value="4">Apr</option>
+                            <option value="5">May</option>
+                            <option value="6">Jun</option>
+                            <option value="7">Jul</option>
+                            <option value="8">Aug</option>
+                            <option value="9">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                        </select>
+                        <select class="form-select form-select-sm" aria-label="Day" data-bind="value: NewRaceDay">
+                            <option selected></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Race Time.</span>
+
+                        <select class="form-select form-select-sm" aria-label="Hour" data-bind="value: NewRaceHour">
+                            <option selected></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                        </select>
+                        <select class="form-select form-select-sm" aria-label="Minute" data-bind="value: NewRaceMinute">
+                            <option selected></option>
+                            <option value="00">00</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Race Distance.</span>
+                        <input type="text" class="form-control" placeholder="Race Distance" data-bind="value: NewRaceDistance" aria-label="TeamNumber">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Start Interval(min).</span>
+                        <input type="text" class="form-control" placeholder="Race Interval" data-bind="value: NewStartInverval" aria-label="TeamNumber">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+
+                        <input class="form-control form-control-sm" id="formFileSm" type="file" accept=".csv" />
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">No.</span>
+                        <input type="text" class="form-control" placeholder="Number" data-bind="value: NewTeamNumber" aria-label="TeamNumber">
+                        <span class="input-group-text">Name</span>
+                        <input type="text" class="form-control" placeholder="Name" data-bind="value: NewTeamName" aria-label="TeamName">
+                        <button type="button" data-bind="click:AddTeams" class="btn btn-secondary btn-sm">Add</button>
+                    </div>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">Number</th>
+                                <th scope="col">Name</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider" data-bind="foreach:Teams">
+                            <tr>
+
+                                <td data-bind="text: TeamNumber"></td>
+                                <td data-bind="text: TeamName"></td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" data-bind="click:SaveSettings" id="liveToastBtn" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+
+        <div class="d-flex">
+            <div class="toast-body" data-bind="html: ToastMessage"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script src="~/js/RaceConfig.js" asp-append-version="true"></script>
+
+
+
+
+
