@@ -18,17 +18,26 @@ namespace eTimeTrial.Web.Backend.Orchestrator
     }
     public class RaceOrchestrator : IRaceOrchestrator
     {
-        private readonly ICosmosDataService _cosmosDataService;
-        private readonly Database _database;
-        private readonly Container _container;
+        //private readonly ICosmosDataService _cosmosDataService;
+        //private readonly Database _database;
+        //private readonly Container _container;
+        //private readonly ILogger<RaceOrchestrator> _logger;
+
+        //public RaceOrchestrator(ICosmosDataService cosmosDataService, ILogger<RaceOrchestrator> logger)
+        //{
+        //    _logger = logger;
+        //    _cosmosDataService = cosmosDataService;
+        //    _database = _cosmosDataService.CreateDatabaseAsync("eTimeTrial").Result;
+        //    _container = _cosmosDataService.CreateContainerAsync(_database, "Races", "Event").Result;
+        //}
+
+        private readonly IRaceRepository _repository;
         private readonly ILogger<RaceOrchestrator> _logger;
 
-        public RaceOrchestrator(ICosmosDataService cosmosDataService, ILogger<RaceOrchestrator> logger)
+        public RaceOrchestrator(IRaceRepository repository,ILogger<RaceOrchestrator> logger)
         {
+            _repository = repository;
             _logger = logger;
-            _cosmosDataService = cosmosDataService;
-            _database = _cosmosDataService.CreateDatabaseAsync("eTimeTrial").Result;
-            _container = _cosmosDataService.CreateContainerAsync(_database, "Races", "Event").Result;
         }
 
 
@@ -46,8 +55,9 @@ namespace eTimeTrial.Web.Backend.Orchestrator
                         team.OffSetMin = (team.StartPosition - 1) * race.Interval;
                         //team.TeamStartTime = race.RaceDate.AddMinutes(team.OffSetMin);
                     }
-                    _ = await _cosmosDataService.AddRaceToContainerAsync(_container, race);
-                    return race;
+                    return await _repository.CreateRaceAsync(race);
+                    // _ = await _cosmosDataService.AddRaceToContainerAsync(_container, race);
+                    // return race;
                 }
 
 
@@ -65,7 +75,8 @@ namespace eTimeTrial.Web.Backend.Orchestrator
         {
             try
             {
-                var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                //var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                var race =await _repository.GetRaceAsync(raceId,raceName);
                 race.Status = RaceStatus.InProgress;
                 race.RaceStart = DateTime.UtcNow;
 
@@ -74,7 +85,8 @@ namespace eTimeTrial.Web.Backend.Orchestrator
                     team.TeamStartTime = race.RaceStart.Value.AddMinutes(team.OffSetMin).ToLongTimeString();//.ToString("hh:mm:ss");
                 }
 
-                var updatedRace = await _cosmosDataService.UpdateRace(_container, race);
+                //var updatedRace = await _cosmosDataService.UpdateRace(_container, race);
+                await _repository.UpdateRaceAsync(race);
             }
             catch (Exception ex)
             {
@@ -86,7 +98,8 @@ namespace eTimeTrial.Web.Backend.Orchestrator
         {
             try
             {
-                var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                //var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                var race = await _repository.GetRaceAsync(raceId,raceName);
                 var team = race.Teams.Where(t => t.TeamNumber == teamNumber).FirstOrDefault();
                 if (team != null)
                 {
@@ -124,7 +137,9 @@ namespace eTimeTrial.Web.Backend.Orchestrator
                     team.TeamFinishTime = DateTime.Now.ToLongTimeString();//.ToString("hh:mm:ss.fff");
                     team.TeamDuration = formattedDuration;
 
-                    var updatedRace = await _cosmosDataService.UpdateRace(_container, race);
+                    //var updatedRace = await _cosmosDataService.UpdateRace(_container, race);
+                    await _repository.UpdateRaceAsync(race);
+
                     return team;
                 }
 
@@ -143,15 +158,16 @@ namespace eTimeTrial.Web.Backend.Orchestrator
         {
             try
             {
-                var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
-
+                // var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                var race = await _repository.GetRaceAsync(raceId, raceName);
                 foreach (var team in race.Teams.Where(t => string.IsNullOrEmpty(t.TeamFinishTime)))
                 {
                     team.TeamFinishTime = "DNF";
                 }
                 race.RaceFinish = DateTime.Now;
                 race.Status = RaceStatus.Finished;
-                var updatedRace = await _cosmosDataService.UpdateRace(_container, race);
+                //var updatedRace = await _cosmosDataService.UpdateRace(_container, race);
+                await _repository.UpdateRaceAsync(race);
             }
             catch (Exception ex)
             {
@@ -163,8 +179,8 @@ namespace eTimeTrial.Web.Backend.Orchestrator
         {
             try
             {
-                var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
-
+                //var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                var race = await _repository.GetRaceAsync(raceId, raceName);
                 return race;
             }
             catch (Exception ex)
@@ -177,7 +193,8 @@ namespace eTimeTrial.Web.Backend.Orchestrator
         {
             try
             {
-                var raceList = await _cosmosDataService.GetRaces(_container);
+                //var raceList = await _cosmosDataService.GetRaces(_container);
+                var raceList = await _repository.GetRacesAsync();
                 return raceList.Where(item => item.Status == RaceStatus.NotStarted || item.Status == RaceStatus.InProgress).ToList();
             }
             catch (Exception ex)
@@ -191,7 +208,8 @@ namespace eTimeTrial.Web.Backend.Orchestrator
         {
             try
             {
-                var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                //var race = await _cosmosDataService.GetRace(_container, raceId, raceName);
+                var race = await _repository.GetRaceAsync(raceId,raceName);
                 var raceStatistics = new RaceStatistics
                 {
                     StartTime = race.RaceStart.Value.ToShortTimeString(),
@@ -199,7 +217,7 @@ namespace eTimeTrial.Web.Backend.Orchestrator
                     Finished = race.Teams.Where(item => item.TeamFinishTime != null).Count(),
                     Started = race.Teams.Where(item => item.TeamStartTime != null).Count(),
                 };
-                return null;
+                return raceStatistics;
             }
             catch (Exception ex)
             {
