@@ -25,9 +25,14 @@ steps:
     arguments: '--configuration Release'
 
 - task: DotNetCoreCLI@2
-  displayName: Test
+  displayName: Test with Code Coverage
   inputs:
     command: test
     projects: '**/*Test.csproj'
-    arguments: '--configuration Release'
+    arguments: '--configuration Release --collect:"XPlat Code Coverage"'
     publishTestResults: true
+
+- task: PublishCodeCoverageResults@2
+  displayName: Publish Code Coverage
+  inputs:
+    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
