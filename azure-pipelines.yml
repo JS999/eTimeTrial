@@ -36,3 +36,13 @@ steps:
   displayName: Publish Code Coverage
   inputs:
     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
+- task: Docker@2
+  displayName: Build Docker Image
+  inputs:
+    command: build
+    Dockerfile: Dockerfile
+    repository: etimetrial-web
+    tags: |
+      $(Build.BuildId)
+      latest
