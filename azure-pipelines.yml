@@ -38,10 +38,10 @@ steps:
     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
 - task: Docker@2
-  displayName: Build and Push Docker Image
+  displayName: 'Build and Push Docker Image'
   inputs:
-    command: buildAndPush
-    containerRegistry: 'AzureContainerRegistry'
+    command: 'buildAndPush'
+    containerRegistry: 'ACR-etimetrialacr999'
     repository: 'etimetrial-web'
     Dockerfile: 'Dockerfile'
     tags: |
