@@ -1,4 +1,4 @@
-param location string = resourceGroup().location
+param location string = 'westeurope'
 
 param acrName string
 param webAppName string
