@@ -41,7 +41,7 @@ steps:
   displayName: 'Build and Push Docker Image'
   inputs:
     command: 'buildAndPush'
-    containerRegistry: 'ACR-etimetrialacr999'
+    containerRegistry: 'eTimeTrialDockerConnection'
     repository: 'etimetrial-web'
     Dockerfile: 'Dockerfile'
     tags: |
