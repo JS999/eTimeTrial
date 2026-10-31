@@ -39,11 +39,16 @@ resource webApp 'Microsoft.Web/sites@2023-12-01' = {
   name: webAppName
   location: location
 
+  identity: {
+    type: 'SystemAssigned'
+  }
+
   properties: {
     serverFarmId: appPlan.id
 
     siteConfig: {
       linuxFxVersion: 'DOCKER|${acr.properties.loginServer}/etimetrial-web:latest'
+      acrUseManagedIdentityCreds: true
     }
   }
 }
