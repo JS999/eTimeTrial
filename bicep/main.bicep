@@ -48,21 +48,7 @@ resource webApp 'Microsoft.Web/sites@2023-12-01' = {
     }
   }
 }
-resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(acr.id, webApp.id, 'AcrPull')
 
-  scope: acr
-
-  properties: {
-    principalId: webApp.identity.principalId
-    principalType: 'ServicePrincipal'
-
-    roleDefinitionId: subscriptionResourceId(
-      'Microsoft.Authorization/roleDefinitions',
-      '7f951dda-4ed3-4680-a7ca-43fe172d538d'
-    )
-  }
-}
 resource webAppSettings 'Microsoft.Web/sites/config@2023-12-01' = {
   parent: webApp
   name: 'appsettings'
